@@ -36,7 +36,8 @@ In the first step, without fflush, the child always printed first
 because the parent's output was buffered and not flushed before the child executed.
 In the second step, with fflush in both parent and child, the parent printed first
 most of the time, because the fflush forced the parent's output to be written immediately.
-In the third step, the parent still printed first most of the time.
+In the third step, the parent still printed first most of the time, write buffer size
+of the message and outputs it immediately.
 
 Adding sleep for 0.1 second changed the write()
 variant of my program to print parent first 990 times and
