@@ -7,6 +7,7 @@ Ryan Vo
 0Yo!1Yo!Yo!2Yo!Yo!Yo!3Yo!Yo!Yo!Yo!4Yo!Yo!Yo!Yo!Yo!5Yo!Yo!Yo!Yo!Yo!5%
 
 The printf has a buffer and is not being flushed as we expect.
+The Yo's are repeated cause the parent's buffer is not cleared after each fork.
 
 ## 7.
 
