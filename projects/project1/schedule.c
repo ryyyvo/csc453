@@ -53,7 +53,7 @@ int parse_args(int argc, char *argv[], int *quantum, char *processes[MAX_PROCESS
         }
     }
 
-    // Count the final process if we have arguments
+    // count the final process if there were arguments
     if (current_arg > 0) {
         current_process++;
     }
