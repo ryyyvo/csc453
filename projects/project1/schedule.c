@@ -26,32 +26,32 @@ int parse_args(int argc, char *argv[], int *quantum, char *processes[MAX_PROCESS
 
    for (int i = 2; i < argc; i++) 
    {
-        if (strcmp(argv[i], ":") == 0) {
-            if (current_arg > 0) { 
-                current_process++;
-                current_arg = 0;
-            }
-            if (current_process >= MAX_PROCESSES) {
+    if (strcmp(argv[i], ":") == 0) {
+        if (current_arg > 0) {
+            if (current_process + 1 >= MAX_PROCESSES) { 
                 fprintf(stderr, "Exceeded maximum number of processes (%d)\n", MAX_PROCESSES);
                 return 1;
             }
+            current_process++;
+            current_arg = 0;
         }
-        else {
-            if (current_arg >= MAX_ARGUMENTS) {
-                fprintf(stderr, "Exceeded maximum number of arguments per process (%d)\n", MAX_ARGUMENTS);
-                return 1;
-            }
-
-            processes[current_process][current_arg] = malloc(strlen(argv[i]) + 1);
-
-            if (!processes[current_process][current_arg]) {
-                fprintf(stderr, "Memory allocation failed\n");
-                return 1;
-            }
-            strcpy(processes[current_process][current_arg], argv[i]);
-            current_arg++;
+    } 
+    else 
+    {
+        if (current_arg >= MAX_ARGUMENTS) {
+            fprintf(stderr, "Exceeded maximum number of arguments per process (%d)\n", MAX_ARGUMENTS);
+            return 1;
         }
-    }
+
+        processes[current_process][current_arg] = malloc(strlen(argv[i]) + 1);
+
+        if (!processes[current_process][current_arg]) {
+            fprintf(stderr, "Memory allocation failed\n");
+            return 1;
+        }
+        strcpy(processes[current_process][current_arg], argv[i]);
+        current_arg++;
+    }}
 
     // count the final process if there were arguments
     if (current_arg > 0) {
