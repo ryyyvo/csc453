@@ -5,7 +5,7 @@
 
 
 #define MAX_PROCESSES 100
-#define MAX_ARGUMENTS 10
+#define MAX_ARGUMENTS 11
 
 int parse_args(int argc, char *argv[], int *quantum, char *processes[MAX_PROCESSES][MAX_ARGUMENTS], int *num_processes)
 {
@@ -27,8 +27,14 @@ int parse_args(int argc, char *argv[], int *quantum, char *processes[MAX_PROCESS
    for (int i = 2; i < argc; i++) 
    {
         if (strcmp(argv[i], ":") == 0) {
-            current_process++;
-            current_arg = 0;
+            if (current_arg > 0) { 
+                current_process++;
+                current_arg = 0;
+            }
+            if (current_process >= MAX_PROCESSES) {
+                fprintf(stderr, "Exceeded maximum number of processes (%d)\n", MAX_PROCESSES);
+                return 1;
+            }
         }
         else {
             if (current_arg >= MAX_ARGUMENTS) {
@@ -67,7 +73,6 @@ void free_processes(char *processes[MAX_PROCESSES][MAX_ARGUMENTS], int num_proce
 }
 
 // test 
-
 void print_processes(char *processes[MAX_PROCESSES][MAX_ARGUMENTS], int num_processes)
 {
     printf("\nParsed %d processes:\n", num_processes);
@@ -79,7 +84,6 @@ void print_processes(char *processes[MAX_PROCESSES][MAX_ARGUMENTS], int num_proc
         printf("\n");
     }
 }
-
 // end test
 
 
