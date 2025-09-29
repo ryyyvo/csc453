@@ -13,7 +13,7 @@ int main(void)
         if (fork())
         {
             sleep(SLEEP);
-            // printf("parent "); 
+            // printf("parent ");
             // fflush(stdout);
             write(STDOUT_FILENO, msg_p, sizeof(msg_p) - 1);
             wait(NULL);
@@ -21,14 +21,14 @@ int main(void)
         else
         {
             sleep(SLEEP);
-            // printf("child "); 
+            // printf("child ");
             // fflush(stdout);
             write(STDOUT_FILENO, msg_c, sizeof(msg_c) - 1);
             return 0;
         }
         sleep(SLEEP);
         // printf("%i\n", i);
-        // fflush(stdout); 
+        // fflush(stdout);
         write(STDOUT_FILENO, nl, sizeof(nl) - 1);
     }
     return 0;
