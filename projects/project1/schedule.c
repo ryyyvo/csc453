@@ -89,16 +89,12 @@ void print_processes(char *processes[MAX_PROCESSES][MAX_ARGUMENTS], int num_proc
 
 int main(int argc, char *argv[])
 {
-   int quantum;
-   int num_processes = 0;
-   char *processes[MAX_PROCESSES][MAX_ARGUMENTS];
+    int quantum;
+    int num_processes = 0;
+    char *processes[MAX_PROCESSES][MAX_ARGUMENTS];
 
     // initialize the processes array to NULL
-    for (int i = 0; i < MAX_PROCESSES; i++) {
-        for (int j = 0; j < MAX_ARGUMENTS; j++) {
-            processes[i][j] = NULL;
-        }
-    }
+    memset(processes, 0, sizeof(processes));
     
     if (parse_args(argc, argv, &quantum, processes, &num_processes) != 0) {
         return 1;
@@ -115,15 +111,9 @@ int main(int argc, char *argv[])
             pid_t pid = fork();
             if (pid == 0) {
                 // child process
-                char *args[MAX_ARGUMENTS];
-                int i;
-                for (i = 0; i < MAX_ARGUMENTS - 1 && processes[proc_idx][i] != NULL; i++) {
-                    args[i] = processes[proc_idx][i];
-                }
-                args[i] = NULL;
-                printf("Executing: %s\n", args[0]);
+                printf("Executing: %s\n", processes[proc_idx][0]);
                 
-                execv(args[0], args);
+                execv(processes[proc_idx][0], processes[proc_idx]);
                 perror("execv failed");
                 exit(1);
             } else if (pid > 0) {
