@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <sys/wait.h>
 
 #define MAX_PROCESSES 100
 #define MAX_ARGUMENTS 11
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
    int num_processes = 0;
    char *processes[MAX_PROCESSES][MAX_ARGUMENTS];
 
-    // Initialize the processes array to NULL
+    // initialize the processes array to NULL
     for (int i = 0; i < MAX_PROCESSES; i++) {
         for (int j = 0; j < MAX_ARGUMENTS; j++) {
             processes[i][j] = NULL;
@@ -105,8 +105,39 @@ int main(int argc, char *argv[])
     }
     
     print_processes(processes, num_processes);
+
+
+    // schedule only the first process for now
+    if (num_processes > 0) {
+        printf("\nScheduling process 0: %s\n", processes[0][0]);
+        
+        pid_t pid = fork();
+        if (pid == 0) {
+            // child process
+            char *args[MAX_ARGUMENTS];
+            int i;
+            for (i = 0; i < MAX_ARGUMENTS - 1 && processes[0][i] != NULL; i++) {
+                args[i] = processes[0][i];
+            }
+            args[i] = NULL;
+            printf("Executing: %s\n", args[0]);
+            
+            execv(args[0], args);
+            perror("execv failed");
+            exit(1);
+        } else if (pid > 0) {
+            // parent process 
+            int status;
+            waitpid(pid, &status, 0);
+            printf("Process 0 completed with status %d\n", WEXITSTATUS(status));
+        } else {
+            perror("fork failed");
+        }
+    } else {
+        printf("No processes to schedule.\n");
+    }
     
-    // Clean up memory
+    // clean up memory
     free_processes(processes, num_processes);
 
    return 0;
