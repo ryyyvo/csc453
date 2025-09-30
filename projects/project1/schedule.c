@@ -107,31 +107,33 @@ int main(int argc, char *argv[])
     print_processes(processes, num_processes);
 
 
-    // schedule only the first process for now
+    // schedule all processes in order
     if (num_processes > 0) {
-        printf("\nScheduling process 0: %s\n", processes[0][0]);
-        
-        pid_t pid = fork();
-        if (pid == 0) {
-            // child process
-            char *args[MAX_ARGUMENTS];
-            int i;
-            for (i = 0; i < MAX_ARGUMENTS - 1 && processes[0][i] != NULL; i++) {
-                args[i] = processes[0][i];
-            }
-            args[i] = NULL;
-            printf("Executing: %s\n", args[0]);
+        for (int proc_idx = 0; proc_idx < num_processes; proc_idx++) {
+            printf("\nScheduling process %d: %s\n", proc_idx, processes[proc_idx][0]);
             
-            execv(args[0], args);
-            perror("execv failed");
-            exit(1);
-        } else if (pid > 0) {
-            // parent process 
-            int status;
-            waitpid(pid, &status, 0);
-            printf("Process 0 completed with status %d\n", WEXITSTATUS(status));
-        } else {
-            perror("fork failed");
+            pid_t pid = fork();
+            if (pid == 0) {
+                // child process
+                char *args[MAX_ARGUMENTS];
+                int i;
+                for (i = 0; i < MAX_ARGUMENTS - 1 && processes[proc_idx][i] != NULL; i++) {
+                    args[i] = processes[proc_idx][i];
+                }
+                args[i] = NULL;
+                printf("Executing: %s\n", args[0]);
+                
+                execv(args[0], args);
+                perror("execv failed");
+                exit(1);
+            } else if (pid > 0) {
+                // parent process 
+                int status;
+                waitpid(pid, &status, 0);
+                printf("Process %d completed with status %d\n", proc_idx, WEXITSTATUS(status));
+            } else {
+                perror("fork failed");
+            }
         }
     } else {
         printf("No processes to schedule.\n");
