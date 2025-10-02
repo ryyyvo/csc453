@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
             {
                 // parent process
                 int status;
-                waitpid(pid, &status, 0);
+                waitpid(pid, &status, WUNTRACED);
                 printf("Process %d completed with status %d\n", proc_idx, WEXITSTATUS(status));
             }
             else
