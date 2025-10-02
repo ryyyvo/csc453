@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/time.h>
 
 #define MAX_PROCESSES 100
 #define MAX_ARGUMENTS 11
@@ -102,9 +103,15 @@ int main(int argc, char *argv[])
     int quantum;
     int num_processes = 0;
     char *processes[MAX_PROCESSES][MAX_ARGUMENTS];
+    struct itimerval timer;
 
     // initialize the processes array to NULL
     memset(processes, 0, sizeof(processes));
+    memset(&timer, 0, sizeof(timer));
+    timer.it_value.tv_usec = quantum * 1000;
+    timer.it_interval.tv_usec = quantum * 1000;
+    setitimer(ITIMER_REAL, &timer, NULL);
+    signal(SIGALRM, timerHandler);
 
     if (parse_args(argc, argv, &quantum, processes, &num_processes) != 0)
     {
