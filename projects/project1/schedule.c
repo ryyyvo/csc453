@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/time.h>
+#include <sys/types.h>
 
 #define MAX_PROCESSES 100
 #define MAX_ARGUMENTS 11
