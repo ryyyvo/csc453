@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
            
             if (pid == 0)
             {
+                signal(SIGALRM, SIG_IGN);
                 // child process
                 execvp(processes[proc_idx][0], processes[proc_idx]);
                 execv(processes[proc_idx][0], processes[proc_idx]);
