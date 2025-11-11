@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import random
 
@@ -11,7 +12,7 @@ def read_access_sequence(filename):
     return sequence
 
 def generate_random_sequence():
-    return [random.randint(MIN_CYLINDER, MAX_CYLINDER) for _ in range(100)]
+    return [random.randint(MIN_CYLINDER, MAX_CYLINDER) for i in range(100)]
 
 def fcfs(init_position, sequence):
     total_distance = 0
