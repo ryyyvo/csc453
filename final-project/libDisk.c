@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "error.h"
-#include "libDisk.h"
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "error.h"
+#include "libDisk.h"
 
 #define BLOCKSIZE 256
 
