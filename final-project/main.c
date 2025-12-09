@@ -33,7 +33,6 @@ void initDisk() {
     disk[SUPERBLOCK].data[SUPERBLOCK] = 1;
 }
 
-// write disk to step file
 int writeDiskToFile(int stepNum) {
     char filename[100];
     sprintf(filename, "Release/step_%d.bin", stepNum);
@@ -218,7 +217,6 @@ int main() {
     }
     
     fclose(inputFile);
-    printf("Processed %d commands successfully\n", step_counter - 1);
     
     return 0;
 }
