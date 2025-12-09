@@ -99,7 +99,7 @@ int createFile(int fileID, int numBlocks) {
         return -1;
     }
     
-    if (numBlocks < 1 || numBlocks > NUM_BLOCKS - 2) {
+    if (numBlocks < 1 || numBlocks > NUM_BLOCKS - 1) {
         printf("Error: Invalid number of blocks %d\n", numBlocks);
         return -1;
     }
@@ -113,9 +113,8 @@ int createFile(int fileID, int numBlocks) {
     }
     
     // find free blocks
-    int totalBlocks = numBlocks + 1;
-    int *blocks = malloc(totalBlocks * sizeof(int));
-    if (findVerticalBlocks(totalBlocks, blocks) != 0) {
+    int *blocks = malloc(numBlocks * sizeof(int));
+    if (findVerticalBlocks(numBlocks, blocks) != 0) {
         printf("Error: Not enough free blocks for file %d\n", fileID);
         free(blocks);
         return -1;
@@ -125,7 +124,7 @@ int createFile(int fileID, int numBlocks) {
     disk[inodeBlock].data[0] = fileID;
     
     // store indices of data blocks in inode
-    for (int i = 1; i < totalBlocks; i++) {
+    for (int i = 1; i < numBlocks; i++) {
         disk[inodeBlock].data[i] = blocks[i];
     }
     
@@ -133,7 +132,7 @@ int createFile(int fileID, int numBlocks) {
     disk[SUPERBLOCK].data[inodeBlock] = 1;
     
     // initialize data blocks
-    for (int i = 1; i < totalBlocks; i++) {
+    for (int i = 1; i < numBlocks; i++) {
         int blockIdx = blocks[i];
         disk[blockIdx].data[0] = fileID;
         disk[SUPERBLOCK].data[blockIdx] = 1;
